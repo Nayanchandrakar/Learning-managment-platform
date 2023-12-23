@@ -5,7 +5,7 @@ interface LogoProps {}
 
 const Logo: FC<LogoProps> = ({}) => {
   return (
-    <Link href="/" className="w-40">
+    <Link href="/" className="w-40 md:inline-block hidden">
       <svg
         id="logo-12"
         width="100%"

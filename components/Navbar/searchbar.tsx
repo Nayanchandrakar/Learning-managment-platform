@@ -7,7 +7,7 @@ interface SearchBarProps {}
 
 const SearchBar: FC<SearchBarProps> = ({}) => {
   return (
-    <div className="relative w-full max-w-[30rem]">
+    <div className="relative w-full max-w-[30rem] md:inline-block hidden">
       <Search className="absolute top-3 w-4 h-4 left-3  text-muted-foreground" />
       <Input
         placeholder="Search for a Course"

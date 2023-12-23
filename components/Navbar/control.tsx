@@ -1,10 +1,9 @@
-import { FC } from "react";
+"use client";
+
 import { Button } from "../ui/button";
 import { LogIn } from "lucide-react";
 
-interface ControlsProps {}
-
-const Controls: FC<ControlsProps> = ({}) => {
+const Controls = () => {
   return (
     <div className="flex space-x-2">
       <Button size="sm" variant="ghost" className="border border-zinc-200">
