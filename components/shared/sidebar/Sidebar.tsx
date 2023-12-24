@@ -30,7 +30,7 @@ const Sidebar = () => {
   };
 
   return (
-    <aside className="mt-20 flex flex-col space-y-3 w-full">
+    <aside className="md:mt-20 flex flex-col space-y-3 w-full">
       <>
         {navigationData?.map((navigation, index) => (
           <span

@@ -9,7 +9,7 @@ interface NavbarProps {}
 
 const Navbar: FC<NavbarProps> = ({}) => {
   return (
-    <header className="w-full h-20 border-b fixed inset-0 bg-white z-[100] flex items-center justify-between px-4 space-x-8">
+    <header className="w-full h-20 border-b fixed inset-0 bg-white z-[60] flex items-center justify-between px-4 space-x-8">
       <MobileMenu />
       <Logo />
       <SearchBar />

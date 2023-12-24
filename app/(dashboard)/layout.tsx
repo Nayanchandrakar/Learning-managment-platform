@@ -18,7 +18,7 @@ export default function DashboardLayout({
       {/* sidebar div  */}
 
       <div
-        className="fixed hidden md:flex inset-0 w-72 h-full  border-r p-4 bg-white z-[80]
+        className="fixed hidden md:flex inset-0 w-72 h-full  border-r p-4 bg-white z-[50]
       "
       >
         <Sidebar />
