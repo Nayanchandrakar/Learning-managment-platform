@@ -23,10 +23,13 @@ export const POST = async (req: Request) => {
     });
 
     if (userExist) {
-      return new Response("user already exist in database", { status: 402 });
+      return new Response(
+        "Email already in use please try with different email",
+        { status: 402 }
+      );
     }
 
-    await prismadb.requests.create({
+    const create = await prismadb.requests.create({
       data: {
         name,
         email,

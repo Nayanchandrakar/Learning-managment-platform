@@ -10,17 +10,97 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
-
 model requests {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  name String
-  email String @unique
-  userId String @unique
-  isApproved Boolean @default(false)
-  description  String
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  email       String
+  userId      String  @unique
+  isApproved  Boolean @default(false)
+  description String
 }
 
+model Course {
+  id          String        @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  userId      String        @unique
+  descriptoin String?
+  price       Int?
+  imageUrl    String?
+  isPublish   Boolean       @default(false)
+  attachments Attachments[]
+  chapters    Chapters[]    @relation("course_chapters")
+  purchases   Purchase[]
+}
 
+model Attachments {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  courseId  String   @db.ObjectId
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  url       String
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
 
+model Chapters {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  title       String?
+  description Json?
+  isPublished Boolean @default(false)
+  isFree      Boolean @default(false)
+  position    Int
 
+  userProgress UserProgress[]
+
+  muxData MuxData?
+
+  courseId String @unique @db.ObjectId
+  course   Course @relation(fields: [courseId], references: [id], name: "course_chapters")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model UserProgress {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String
+  isCompleted Boolean @default(false)
+
+  chapterId String   @unique @db.ObjectId
+  chapter   Chapters @relation(fields: [chapterId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, chapterId])
+}
+
+model MuxData {
+  id         String  @id @default(auto()) @map("_id") @db.ObjectId
+  assetId    String
+  playbackId String?
+
+  chapterId String   @unique @db.ObjectId
+  chapter   Chapters @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+}
+
+model Purchase {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  userId String @unique
+
+  courseId String @db.ObjectId
+  course   Course @relation(fields: [courseId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, courseId])
+}
+
+model StripeCustomer {
+  id               String @id @default(auto()) @map("_id") @db.ObjectId
+  userId           String @unique
+  stripeCustomerId String @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

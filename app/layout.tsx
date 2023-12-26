@@ -7,6 +7,7 @@ import MobileSidebar from "@/components/shared/sidebar/mobile-sidebar";
 import TeacherModal from "@/components/shared/models/teacher-modal";
 import "@/style/globals.css";
 import { getRequest } from "@/actions/getRequests";
+import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -28,6 +29,7 @@ export default async function RootLayout({
         <body className={inter.className}>
           <Navbar />
           <MobileSidebar />
+          <Toaster />
           <TeacherModal request={teacherRequest} />
           {children}
         </body>

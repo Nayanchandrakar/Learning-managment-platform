@@ -25,6 +25,10 @@ export const getRequest = async (): Promise<requests | null> => {
       },
     });
 
+    if (!requests) {
+      return errorHandle;
+    }
+
     return requests;
   } catch (error) {
     return errorHandle;

@@ -24,10 +24,10 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { requests } from "@prisma/client";
-import Link from "next/link";
 import { MoveUpRight } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
 import { formSchema } from "@/schema/zodSchema";
+import { useRouter } from "next/navigation";
 
 interface TeacherModalProps {
   request: requests | null;
@@ -35,6 +35,7 @@ interface TeacherModalProps {
 
 const TeacherModal: FC<TeacherModalProps> = ({ request }) => {
   const teacherModal = useTeaherModal();
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -61,13 +62,18 @@ const TeacherModal: FC<TeacherModalProps> = ({ request }) => {
         description: "An error occured try after some time",
       });
     } finally {
-      teacherModal?.onClose();
+      router.refresh();
     }
+  };
+
+  const handleClick = () => {
+    teacherModal?.onClose();
+    return router.push("/teacher");
   };
 
   return (
     <Modal open={teacherModal?.isOpen} onOpenChange={teacherModal?.onClose}>
-      {request ? (
+      {request?.userId && request?.email ? (
         <div className="flex items-center justify-center w-full h-full flex-col">
           {request?.isApproved ? (
             <>
@@ -75,11 +81,9 @@ const TeacherModal: FC<TeacherModalProps> = ({ request }) => {
                 Congratulations you'r request for being a teacher has been
                 approved by our administrator.
               </p>
-              <Button size="sm" asChild>
-                <Link href="/teacher">
-                  Teacher's Page
-                  <MoveUpRight className="w-5 h-5 ml-2" />
-                </Link>
+              <Button size="sm" onClick={handleClick}>
+                Teacher's Page
+                <MoveUpRight className="w-5 h-5 ml-2" />
               </Button>
             </>
           ) : (
@@ -128,7 +132,7 @@ const TeacherModal: FC<TeacherModalProps> = ({ request }) => {
                     <FormControl>
                       <Input
                         disabled={isSubmiting}
-                        placeholder="enter your email id"
+                        placeholder="enter your contact email id"
                         {...field}
                       />
                     </FormControl>
