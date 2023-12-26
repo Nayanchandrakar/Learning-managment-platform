@@ -58,7 +58,7 @@ const TeacherModal: FC<TeacherModalProps> = ({ request }) => {
     } catch (error) {
       console.log(error);
       return toast({
-        variant: "default",
+        variant: "destructive",
         description: "An error occured try after some time",
       });
     } finally {
