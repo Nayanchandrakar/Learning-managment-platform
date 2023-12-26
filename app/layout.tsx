@@ -6,7 +6,7 @@ import Navbar from "@/components/Navbar/navbar-component";
 import MobileSidebar from "@/components/shared/sidebar/mobile-sidebar";
 import TeacherModal from "@/components/shared/models/teacher-modal";
 import "@/style/globals.css";
-import { getRequest } from "@/app/actions/getRequests";
+import { getRequest } from "@/actions/getRequests";
 
 const inter = Inter({ subsets: ["latin"] });
 
