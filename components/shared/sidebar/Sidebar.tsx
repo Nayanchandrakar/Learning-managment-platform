@@ -1,6 +1,12 @@
 "use client";
 import { cn } from "@/lib/utils";
-import { Compass, Layout, LucideIcon } from "lucide-react";
+import {
+  BarChart2,
+  CircleDollarSign,
+  Compass,
+  Layout,
+  LucideIcon,
+} from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { FC } from "react";
 
@@ -14,9 +20,14 @@ const Sidebar = () => {
   const router = useRouter();
   const pathname = usePathname();
 
-  const navigationData: navigationInterface[] = [
+  const dashboardPanel: navigationInterface[] = [
     { label: "Dashboard", href: "/", Icon: Layout },
     { label: "Browse", href: "/browse", Icon: Compass },
+  ];
+
+  const teacherPanel: navigationInterface[] = [
+    { label: "Analytics", href: "/teacher/analytics", Icon: BarChart2 },
+    { label: "Sales", href: "/teacher/courses", Icon: CircleDollarSign },
   ];
 
   const handleClick = (href: string) => {
@@ -29,10 +40,14 @@ const Sidebar = () => {
     return isActive;
   };
 
+  const panelData = pathname.startsWith("/teacher")
+    ? teacherPanel
+    : dashboardPanel;
+
   return (
     <aside className="md:mt-20 flex flex-col space-y-3 w-full">
       <>
-        {navigationData?.map((navigation, index) => (
+        {panelData?.map((navigation, index) => (
           <span
             key={index}
             onClick={() => handleClick(navigation?.href)}

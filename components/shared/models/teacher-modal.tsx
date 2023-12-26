@@ -68,7 +68,7 @@ const TeacherModal: FC<TeacherModalProps> = ({ request }) => {
 
   const handleClick = () => {
     teacherModal?.onClose();
-    return router.push("/teacher");
+    return router.push("/teacher/analytics");
   };
 
   return (

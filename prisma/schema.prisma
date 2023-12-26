@@ -27,9 +27,17 @@ model Course {
   price       Int?
   imageUrl    String?
   isPublish   Boolean       @default(false)
+  category    Category?     @relation(fields: [categoryId], references: [id])
+  categoryId  String?       @db.ObjectId
   attachments Attachments[]
   chapters    Chapters[]    @relation("course_chapters")
   purchases   Purchase[]
+}
+
+model Category {
+  id      String   @id @default(auto()) @map("_id") @db.ObjectId
+  name    String   @unique
+  courses Course[]
 }
 
 model Attachments {
