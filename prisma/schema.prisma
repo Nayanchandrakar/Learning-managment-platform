@@ -23,7 +23,7 @@ model Course {
   id          String        @id @default(auto()) @map("_id") @db.ObjectId
   name        String
   userId      String        @unique
-  descriptoin String?
+  description String?
   price       Int?
   imageUrl    String?
   isPublish   Boolean       @default(false)
