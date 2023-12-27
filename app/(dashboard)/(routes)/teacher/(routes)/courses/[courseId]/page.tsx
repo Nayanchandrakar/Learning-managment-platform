@@ -3,6 +3,7 @@ import Container from "@/components/shared/container";
 import prismadb from "@/lib/prismadb";
 import { redirect } from "next/navigation";
 import CourseHeaderActions from "./_components/course-header-actions";
+import CourseTitle from "./_components/course-title-field";
 
 const CourseIdPage = async ({
   params,
@@ -53,6 +54,8 @@ const CourseIdPage = async ({
           headerText={courseHeaderText}
           check={isFieldsCompleted}
         />
+
+        <CourseTitle course={course} />
       </Container>
     </>
   );
