@@ -9,3 +9,5 @@ export const formSchema = z.object({
 export const createCourseSchema = z.object({
   name: z.string().min(4).max(30),
 });
+
+

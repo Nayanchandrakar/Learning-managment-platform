@@ -4,6 +4,9 @@ import prismadb from "@/lib/prismadb";
 import { redirect } from "next/navigation";
 import CourseHeaderActions from "./_components/course-header-actions";
 import CourseTitle from "./_components/course-title-field";
+import CourseDescription from "./_components/course-description-action";
+import CourseImageUpload from "./_components/course-image-upload";
+import CourseCategory from "./_components/course-category-actoin";
 
 const CourseIdPage = async ({
   params,
@@ -25,7 +28,7 @@ const CourseIdPage = async ({
     },
   });
 
-  console.log(course);
+  const categories = await prismadb?.category?.findMany();
 
   if (!course) {
     return redirect("/");
@@ -49,13 +52,23 @@ const CourseIdPage = async ({
 
   return (
     <>
-      <Container>
+      <Container className="my-12">
         <CourseHeaderActions
           headerText={courseHeaderText}
           check={isFieldsCompleted}
         />
 
-        <CourseTitle course={course} />
+        <div className="grid grid-cols-1 md:grid-cols-[40%_60%] gap-x-6">
+          {/* course div 1 */}
+          <div className="space-y-4">
+            <CourseTitle course={course} />
+            <CourseDescription course={course} />
+            <CourseImageUpload course={course} />
+            <CourseCategory course={course} categories={categories} />
+          </div>
+
+          <div className="">course div 2</div>
+        </div>
       </Container>
     </>
   );

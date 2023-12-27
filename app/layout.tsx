@@ -9,6 +9,7 @@ import "@/style/globals.css";
 import { getRequest } from "@/actions/getRequests";
 import { Toaster } from "@/components/ui/toaster";
 import CourseCreateModal from "@/app/(dashboard)/(routes)/teacher/(routes)/create/_components/course-create-modal";
+import { EdgeStoreProvider } from "@/lib/edgestore";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -27,14 +28,16 @@ export default async function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={inter.className}>
-          <Navbar />
-          <MobileSidebar />
-          <Toaster />
-          <TeacherModal request={teacherRequest} />
-          <CourseCreateModal />
-          {children}
-        </body>
+        <EdgeStoreProvider>
+          <body className={inter.className}>
+            <Navbar />
+            <MobileSidebar />
+            <Toaster />
+            <TeacherModal request={teacherRequest} />
+            <CourseCreateModal />
+            {children}
+          </body>
+        </EdgeStoreProvider>
       </html>
     </ClerkProvider>
   );
