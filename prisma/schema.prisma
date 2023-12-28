@@ -62,7 +62,7 @@ model Chapters {
 
   muxData MuxData?
 
-  courseId String @unique @db.ObjectId
+  courseId String @db.ObjectId
   course   Course @relation(fields: [courseId], references: [id], name: "course_chapters")
 
   createdAt DateTime @default(now())

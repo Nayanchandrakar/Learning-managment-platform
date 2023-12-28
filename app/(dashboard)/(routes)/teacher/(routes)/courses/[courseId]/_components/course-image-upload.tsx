@@ -3,15 +3,12 @@
 import { FC, useState } from "react";
 import { Chapters, Course } from "@prisma/client";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import axios from "axios";
 import { ImagePlus, PlusCircle } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-import { useEdgeStore } from "@/lib/edgestore";
-import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
-import { SingleImageDropzone } from "@/components/ui/single-image";
+import { UploadButton } from "@/utils/uploadthing";
 
 interface CourseImageUploadProps {
   course: Course & {
@@ -21,49 +18,6 @@ interface CourseImageUploadProps {
 
 const CourseImageUpload: FC<CourseImageUploadProps> = ({ course }) => {
   const [isEdited, setIsEdited] = useState(false);
-  const [file, setFile] = useState<File | undefined>();
-  const [progress, setProgress] = useState<
-    "PENDING" | "COMPLETE" | "ERROR" | number
-  >("PENDING");
-
-  const { edgestore } = useEdgeStore();
-  const router = useRouter();
-
-  const handleImageUpload = async () => {
-    if (file) {
-      try {
-        const res = await edgestore.publicFiles.upload({
-          file,
-          onProgressChange: async (newProgress) => {
-            setProgress(newProgress);
-            if (newProgress === 100) {
-              setProgress("COMPLETE");
-            }
-          },
-        });
-
-        const response = await axios?.patch(`/api/courses/${course?.id}`, {
-          imageUrl: res?.url,
-        });
-
-        setProgress("PENDING");
-        setIsEdited((prev) => !prev);
-
-        return toast({
-          title: "image uploaded succefully!",
-        });
-      } catch (err) {
-        setProgress("ERROR");
-        console.log(err);
-        return toast({
-          description: "An error occured try after some time",
-          variant: "destructive",
-        });
-      } finally {
-        router?.refresh();
-      }
-    }
-  };
 
   const handleEdit = () => {
     setIsEdited((prev) => !prev);
@@ -90,28 +44,42 @@ const CourseImageUpload: FC<CourseImageUploadProps> = ({ course }) => {
 
       <div className="mt-3  ">
         {isEdited ? (
-          <div className="flex flex-col items-center">
-            <SingleImageDropzone
-              value={file}
-              onChange={setFile}
-              disabled={progress !== "PENDING"}
-              dropzoneOptions={{
-                maxSize: 1024 * 1024 * 1, // 1 MB
+          <div className="flex flex-col items-center w-full h-[15rem] justify-center border border-dashed border-zinc-600 rounded-lg">
+            <UploadButton
+              endpoint="imageUploader"
+              onClientUploadComplete={async (res) => {
+                try {
+                  const response = await axios.patch(
+                    `/api/courses/${course?.id}`,
+                    {
+                      imageUrl: res?.[0]?.url,
+                    }
+                  );
+
+                  setIsEdited((prev) => !prev);
+                  return toast({
+                    title: "course image succefully uploaded!",
+                  });
+                } catch (error) {
+                  console.log(
+                    error,
+                    "an error occured during chapter image uploading"
+                  );
+                  return toast({
+                    variant: "destructive",
+                    description:
+                      "an error occured during image url upload in server!",
+                  });
+                }
+              }}
+              onUploadError={(error: Error) => {
+                console.log(error, "error from course image upload");
+                return toast({
+                  variant: "destructive",
+                  description: "an error occured during image upload!",
+                });
               }}
             />
-            <Button
-              className="mt-2"
-              onClick={handleImageUpload}
-              disabled={!file || progress !== "PENDING"}
-            >
-              {progress === "PENDING"
-                ? "Upload"
-                : progress === "COMPLETE"
-                ? "Done"
-                : typeof progress === "number"
-                ? `Uploading (${Math.round(progress)}%)`
-                : "Error"}
-            </Button>
           </div>
         ) : (
           <div
