@@ -1,6 +1,6 @@
 "use client";
 import { FC, useState } from "react";
-import { GripVertical, Loader2, Pencil, PlusCircle } from "lucide-react";
+import { Loader2, PlusCircle } from "lucide-react";
 
 import { Input } from "@/components/ui/input";
 import {
@@ -16,10 +16,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Chapters, Course } from "@prisma/client";
 import { toast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { Badge } from "@/components/ui/badge";
+import ChapterDroppable from "./chapter-droppable";
+import { cn } from "@/lib/utils";
 
 interface CourseChapterProps {
   course: Course & {
@@ -33,6 +33,7 @@ const formSchema = z?.object({
 
 const CourseChapter: FC<CourseChapterProps> = ({ course }) => {
   const [isEdited, setIsEdited] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -80,8 +81,58 @@ const CourseChapter: FC<CourseChapterProps> = ({ course }) => {
     setIsEdited((prev) => !prev);
   };
 
-  const handleClick = async (chapterId: string) => {
+  const handleToogle = async (chapterId: string) => {
     router?.push(`/teacher/courses/${course?.id}/chapters/${chapterId}`);
+  };
+
+  const reorder = (startIndex: number, endIndex: number) => {
+    const [removed] = chapters.splice(startIndex, 1);
+    chapters.splice(endIndex, 0, removed);
+    return chapters;
+  };
+
+  const onDragEnd = async (result: any) => {
+    if (!result.destination) {
+      return;
+    }
+
+    const sourceIndex = result?.source.index;
+    const destinationIndex = result?.destination.index;
+
+    reorder(sourceIndex, destinationIndex);
+
+    const draggedChapter = chapters[destinationIndex];
+
+    if (draggedChapter) {
+      setIsDragging(true);
+      try {
+        const response = await axios?.patch(`/api/courses/${course?.id}`, {
+          chapters: {
+            update: {
+              where: {
+                id: draggedChapter?.id,
+              },
+              data: {
+                position: destinationIndex,
+              },
+            },
+          },
+        });
+
+        router?.refresh();
+        return toast({
+          title: "chapter reordered succfully!",
+        });
+      } catch (error) {
+        console.log(error);
+        return toast({
+          variant: "destructive",
+          description: "An error occured try after some time",
+        });
+      } finally {
+        setIsDragging(false);
+      }
+    }
   };
 
   return (
@@ -135,64 +186,20 @@ const CourseChapter: FC<CourseChapterProps> = ({ course }) => {
               {"No chapters"}
             </p>
           ) : (
-            <div className="space-y-3">
-              {chapters?.map((chapter) => (
-                <div
-                  key={chapter?.id}
-                  className={cn(
-                    "w-full h-13  flex justify-between items-center flex-row border border-zinc-300 rounded-lg",
-                    chapter?.isPublished ? "bg-sky-100" : "bg-gray-200"
-                  )}
-                >
-                  {/* first div here  */}
-                  <div className="flex flex-row items-center  ">
-                    <span className="w-12 h-12 flex items-center justify-center  border-r border-r-zinc-300 ">
-                      <GripVertical
-                        className={cn(
-                          "w-6 h-6 ",
-                          chapter?.isPublished
-                            ? "text-sky-800"
-                            : "text-gray-600"
-                        )}
-                      />
-                    </span>
-                    <span
-                      className={cn(
-                        "text-sm font-medium ml-3 ",
-                        chapter?.isPublished ? "text-sky-800" : "text-gray-600"
-                      )}
-                    >
-                      {chapter?.title}
-                    </span>
-                  </div>
-
-                  {/* second div here  */}
-                  <div className="space-x-3 flex items-center flex-row mr-3">
-                    {chapter?.isFree && <Badge className="">Free</Badge>}
-                    {
-                      <Badge
-                        className={cn(
-                          chapter?.isPublished ? "bg-cyan-700" : "bg-gray-600"
-                        )}
-                      >
-                        {!chapter?.isPublished ? "Draft" : "Published"}
-                      </Badge>
-                    }
-                    <Pencil
-                      onClick={() => handleClick(chapter?.id)}
-                      className={cn(
-                        "w-5 h-5 cursor-pointer",
-                        chapter?.isPublished ? "text-cyan-700" : "text-gray-600"
-                      )}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
+            <ChapterDroppable
+              onDragEnd={onDragEnd}
+              chapters={chapters}
+              handleToogle={handleToogle}
+            />
           )}
         </div>
 
-        <div className="absolute inset-0 flex items-center justify-center bg-zinc-200/80 rounded-lg">
+        <div
+          className={cn(
+            "absolute inset-0 flex items-center justify-center bg-zinc-200/80 rounded-lg",
+            !isDragging && "hidden"
+          )}
+        >
           <Loader2 className="text-cyan-700 w-8 h-8 animate-spin" />
         </div>
       </>

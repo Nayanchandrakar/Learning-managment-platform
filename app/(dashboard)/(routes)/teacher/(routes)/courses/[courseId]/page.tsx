@@ -26,12 +26,14 @@ const CourseIdPage = async ({
       attachments: true,
       chapters: {
         orderBy: {
-          position: "desc",
+          position: "asc",
         },
       },
       category: true,
     },
   });
+
+  console.log(course);
 
   const categories = await prismadb?.category?.findMany();
 
