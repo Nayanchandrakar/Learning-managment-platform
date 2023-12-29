@@ -21,6 +21,17 @@ const ChapterDroppable: FC<ChapterDroppableProps> = ({
   handleToogle,
   onDragEnd,
 }) => {
+  
+  const getItemStyle = (isDragging: boolean, isPublished: boolean) => {
+    return isPublished
+      ? isDragging
+        ? "bg-sky-200"
+        : "bg-sky-100"
+      : isDragging
+      ? "bg-gray-300 "
+      : "bg-gray-200";
+  };
+
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Droppable droppableId="droppable">
@@ -45,7 +56,7 @@ const ChapterDroppable: FC<ChapterDroppableProps> = ({
                       key={chapter?.id}
                       className={cn(
                         "w-full h-13  flex justify-between items-center flex-row border border-zinc-300 rounded-lg",
-                        chapter?.isPublished ? "bg-sky-100" : "bg-gray-200"
+                        getItemStyle(snapshot?.isDragging, chapter?.isPublished)
                       )}
                     >
                       {/* first div here  */}
@@ -53,7 +64,7 @@ const ChapterDroppable: FC<ChapterDroppableProps> = ({
                         <span className="w-12 h-12 flex items-center justify-center  border-r border-r-zinc-300 ">
                           <GripVertical
                             className={cn(
-                              "w-6 h-6 ",
+                              "w-6 h-6 transition-colors duration-300",
                               chapter?.isPublished
                                 ? "text-sky-800"
                                 : "text-gray-600"

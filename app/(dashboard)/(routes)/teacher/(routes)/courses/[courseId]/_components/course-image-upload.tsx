@@ -46,7 +46,7 @@ const CourseImageUpload: FC<CourseImageUploadProps> = ({ course }) => {
         {isEdited ? (
           <div className="flex flex-col items-center w-full h-[15rem] justify-center border border-dashed border-zinc-600 rounded-lg">
             <UploadButton
-              endpoint="imageUploader"
+              endpoint="courseImage"
               onClientUploadComplete={async (res) => {
                 try {
                   const response = await axios.patch(

@@ -3,3 +3,8 @@ export interface dashboardNavigationInterface {
   label: string;
   href: string;
 }
+
+export interface valuesListInterface {
+  id: string;
+  position: number;
+}

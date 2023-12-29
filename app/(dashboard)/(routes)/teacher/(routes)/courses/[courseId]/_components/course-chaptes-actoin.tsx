@@ -1,8 +1,11 @@
 "use client";
 import { FC, useState } from "react";
 import { Loader2, PlusCircle } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Chapters, Course } from "@prisma/client";
 
-import { Input } from "@/components/ui/input";
 import {
   Form,
   FormControl,
@@ -10,16 +13,15 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Chapters, Course } from "@prisma/client";
+
 import { toast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
+import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import ChapterDroppable from "./chapter-droppable";
 import { cn } from "@/lib/utils";
+import { valuesListInterface } from "@/types/types";
 
 interface CourseChapterProps {
   course: Course & {
@@ -42,6 +44,7 @@ const CourseChapter: FC<CourseChapterProps> = ({ course }) => {
       title: "",
     },
   });
+
   const chapters = course?.chapters?.map((chapter) => ({
     title: chapter?.title,
     id: chapter?.id,
@@ -53,27 +56,24 @@ const CourseChapter: FC<CourseChapterProps> = ({ course }) => {
 
   const onsubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const response = await axios.patch(`/api/courses/${course?.id}`, {
-        chapters: {
-          create: {
-            title: values?.title,
-            position: 0,
-          },
-        },
-      });
+      const response = await axios.post(
+        `/api/courses/${course?.id}/reorder`,
+        values
+      );
 
       setIsEdited((prev) => !prev);
+
+      router?.refresh();
+
       return toast({
         title: "course chapter created succefully",
       });
     } catch (error) {
-      console.log(error);
       return toast({
         variant: "destructive",
         description: "An error occured try after some time",
       });
     } finally {
-      router?.refresh();
     }
   };
 
@@ -103,28 +103,28 @@ const CourseChapter: FC<CourseChapterProps> = ({ course }) => {
 
     const draggedChapter = chapters[destinationIndex];
 
+    const updatedChaptersList = chapters?.map(
+      (chapter, index): valuesListInterface => ({
+        id: chapter?.id,
+        position: index,
+      })
+    );
+
     if (draggedChapter) {
       setIsDragging(true);
       try {
-        const response = await axios?.patch(`/api/courses/${course?.id}`, {
-          chapters: {
-            update: {
-              where: {
-                id: draggedChapter?.id,
-              },
-              data: {
-                position: destinationIndex,
-              },
-            },
-          },
-        });
+        const response = await axios?.put(
+          `/api/courses/${course?.id}/reorder`,
+          {
+            valuesList: updatedChaptersList,
+          }
+        );
 
         router?.refresh();
         return toast({
           title: "chapter reordered succfully!",
         });
       } catch (error) {
-        console.log(error);
         return toast({
           variant: "destructive",
           description: "An error occured try after some time",
@@ -196,7 +196,7 @@ const CourseChapter: FC<CourseChapterProps> = ({ course }) => {
 
         <div
           className={cn(
-            "absolute inset-0 flex items-center justify-center bg-zinc-200/80 rounded-lg",
+            "absolute inset-0 flex items-center justify-center bg-zinc-100/80 rounded-lg",
             !isDragging && "hidden"
           )}
         >

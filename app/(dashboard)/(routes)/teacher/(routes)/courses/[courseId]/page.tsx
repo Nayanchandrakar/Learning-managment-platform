@@ -8,6 +8,8 @@ import CourseDescription from "./_components/course-description-action";
 import CourseImageUpload from "./_components/course-image-upload";
 import CourseCategory from "./_components/course-category-actoin";
 import CourseChapter from "./_components/course-chaptes-actoin";
+import CoursePrice from "./_components/course-price-action";
+import CourseAttachments from "./_components/course-attachments";
 
 const CourseIdPage = async ({
   params,
@@ -23,7 +25,11 @@ const CourseIdPage = async ({
       id: courseId!,
     },
     include: {
-      attachments: true,
+      attachments: {
+        orderBy: {
+          createdAt: "desc",
+        },
+      },
       chapters: {
         orderBy: {
           position: "asc",
@@ -32,8 +38,6 @@ const CourseIdPage = async ({
       category: true,
     },
   });
-
-  console.log(course);
 
   const categories = await prismadb?.category?.findMany();
 
@@ -76,6 +80,8 @@ const CourseIdPage = async ({
 
           <div className="space-y-4">
             <CourseChapter course={course} />
+            <CoursePrice course={course} />
+            <CourseAttachments course={course} />
           </div>
         </div>
       </Container>
