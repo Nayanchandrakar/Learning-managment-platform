@@ -1,17 +1,18 @@
 "use client";
 
 import { FC, useState } from "react";
-import { Chapters, Course, MuxData } from "@prisma/client";
+import { Chapters, MuxData } from "@prisma/client";
 import { z } from "zod";
-import { useRouter } from "next/navigation";
 import axios from "axios";
-import { ImageIcon, PlusCircle, Video } from "lucide-react";
+import { PlusCircle, Video } from "lucide-react";
 import MuxPlayer from "@mux/mux-player-react";
 
 import { cn } from "@/lib/utils";
 import { toast } from "@/components/ui/use-toast";
 import ActionTitle from "@/components/shared/action-titles";
 import { FileUpload } from "@/components/shared/file-upload";
+import { videoFormSchema } from "@/schema/zodSchema";
+import { revalidateServer } from "@/actions/actions";
 
 interface ChapterVideoUploadProps {
   chapter: Chapters & {
@@ -19,13 +20,8 @@ interface ChapterVideoUploadProps {
   };
 }
 
-const formSchema = z.object({
-  videoUrl: z.string().min(1),
-});
-
 const ChapterVideoUpload: FC<ChapterVideoUploadProps> = ({ chapter }) => {
   const [isEdited, setIsEdited] = useState(false);
-  const router = useRouter();
 
   const handleEdit = () => {
     setIsEdited((prev) => !prev);
@@ -33,23 +29,24 @@ const ChapterVideoUpload: FC<ChapterVideoUploadProps> = ({ chapter }) => {
 
   const videoUrl = chapter?.muxData?.playbackId;
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: z.infer<typeof videoFormSchema>) => {
     try {
       const response = await axios.patch(
-        `/api/courses/${chapter?.courseId}/chapter/${chapter?.id}`,
+        `/api/courses/${chapter?.courseId}/chapter/${chapter?.id}/video`,
         values
       );
 
       setIsEdited((prev) => !prev);
-      router?.refresh();
+      await revalidateServer("chapterPage_revalidate");
 
       return toast({
         title: "chapter video succefully uploaded!",
       });
     } catch (error) {
+      console.log(error);
       return toast({
         variant: "destructive",
-        description: "an error occured during image url upload in server!",
+        description: "an error occured during video url upload in server!",
       });
     }
   };
@@ -96,7 +93,10 @@ const ChapterVideoUpload: FC<ChapterVideoUploadProps> = ({ chapter }) => {
               )}
             >
               {videoUrl ? (
-                <MuxPlayer playbackId={chapter?.muxData?.playbackId || ""} />
+                <MuxPlayer
+                  className="rounded-lg"
+                  playbackId={chapter?.muxData?.playbackId || ""}
+                />
               ) : (
                 <Video className="w-12 h-12 " />
               )}

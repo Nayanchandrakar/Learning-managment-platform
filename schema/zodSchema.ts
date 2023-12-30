@@ -10,4 +10,6 @@ export const createCourseSchema = z.object({
   name: z.string().min(4).max(30),
 });
 
-
+export const videoFormSchema = z.object({
+  videoUrl: z.string().min(1),
+});

@@ -2,13 +2,13 @@ import BackButton from "@/components/shared/back-button";
 import Container from "@/components/shared/container";
 import prismadb from "@/lib/prismadb";
 import { redirect } from "next/navigation";
-import CourseHeaderActions from "./_components/chapter-header-actions";
 import { Banner } from "@/components/shared/alert-banner";
 import ChapterTitle from "./_components/chapter-title-field";
 import ChapterDescription from "./_components/chapter-description";
 import ChapterPreview from "./_components/chapter-preview";
 import ChapterHeaderActions from "./_components/chapter-header-actions";
 import ChapterVideoUpload from "./_components/chapter-video-action";
+import { revalidateTag } from "next/cache";
 
 const CourseIdPage = async ({
   params,
@@ -34,6 +34,8 @@ const CourseIdPage = async ({
     redirect("/");
   }
 
+  revalidateTag("chapterPage_revalidate");
+
   const fields = [
     chapter?.title,
     chapter?.description,
@@ -52,6 +54,8 @@ const CourseIdPage = async ({
       {!chapter?.isPublished && (
         <Banner label="This chapter is unpublished. It will not be visible to the students." />
       )}
+
+      <BackButton />
 
       <Container className="mb-12">
         <ChapterHeaderActions
