@@ -63,7 +63,7 @@ model Chapters {
   muxData MuxData?
 
   courseId String @db.ObjectId
-  course   Course @relation(fields: [courseId], references: [id], name: "course_chapters")
+  course   Course @relation(fields: [courseId], references: [id], name: "course_chapters", onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -75,7 +75,7 @@ model UserProgress {
   isCompleted Boolean @default(false)
 
   chapterId String   @unique @db.ObjectId
-  chapter   Chapters @relation(fields: [chapterId], references: [id])
+  chapter   Chapters @relation(fields: [chapterId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -96,7 +96,7 @@ model Purchase {
   userId String @unique
 
   courseId String @db.ObjectId
-  course   Course @relation(fields: [courseId], references: [id])
+  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

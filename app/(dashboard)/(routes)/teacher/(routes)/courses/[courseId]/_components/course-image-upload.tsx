@@ -2,16 +2,16 @@
 
 import { FC, useState } from "react";
 import { Chapters, Course } from "@prisma/client";
+import { z } from "zod";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import axios from "axios";
 import { ImageIcon, ImagePlus, PlusCircle } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { toast } from "@/components/ui/use-toast";
-import { UploadButton } from "@/utils/uploadthing";
 import ActionTitle from "@/components/shared/action-titles";
 import { FileUpload } from "@/components/shared/file-upload";
-import { z } from "zod";
 
 interface CourseImageUploadProps {
   course: Course & {
@@ -25,6 +25,7 @@ const formSchema = z.object({
 
 const CourseImageUpload: FC<CourseImageUploadProps> = ({ course }) => {
   const [isEdited, setIsEdited] = useState(false);
+  const router = useRouter();
 
   const handleEdit = () => {
     setIsEdited((prev) => !prev);
@@ -35,6 +36,8 @@ const CourseImageUpload: FC<CourseImageUploadProps> = ({ course }) => {
       const response = await axios.patch(`/api/courses/${course?.id}`, values);
 
       setIsEdited((prev) => !prev);
+      router?.refresh();
+
       return toast({
         title: "course image succefully uploaded!",
       });
@@ -69,7 +72,7 @@ const CourseImageUpload: FC<CourseImageUploadProps> = ({ course }) => {
 
         <div className="mt-3  ">
           {isEdited ? (
-            <div className="flex flex-col items-center w-full h-[15rem] justify-center border border-dashed border-zinc-600 rounded-lg">
+            <div>
               <FileUpload
                 endpoint="courseImage"
                 onChange={(url) => {
