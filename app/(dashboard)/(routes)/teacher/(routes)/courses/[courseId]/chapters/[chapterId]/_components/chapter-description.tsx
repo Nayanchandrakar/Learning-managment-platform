@@ -12,29 +12,26 @@ import {
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Chapters, Course } from "@prisma/client";
+import { Chapters } from "@prisma/client";
 import { toast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import ActionTitle from "@/components/shared/action-titles";
 import TextEditor from "@/components/shared/text-editor";
 
-interface CourseDescriptionProps {
-  course: Course & {
-    chapters: Chapters[];
-  };
+interface ChapterDescriptionProps {
+  chapter: Chapters;
 }
 
 const formSchema = z.object({
-  description: z.string().min(4).max(80),
+  description: z.string().min(4).max(200),
 });
 
-const CourseDescription: FC<CourseDescriptionProps> = ({ course }) => {
+const ChapterDescription: FC<ChapterDescriptionProps> = ({ chapter }) => {
   const [isEdited, setIsEdited] = useState(false);
   const router = useRouter();
-  const description = course?.description;
+  const description = chapter?.description;
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -47,11 +44,14 @@ const CourseDescription: FC<CourseDescriptionProps> = ({ course }) => {
 
   const onsubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const response = await axios.patch(`/api/courses/${course?.id}`, values);
+      const response = await axios.patch(
+        `/api/courses/${chapter?.courseId}/chapter/${chapter?.id}`,
+        values
+      );
 
       setIsEdited((prev) => !prev);
       return toast({
-        title: "course description updated succefully",
+        title: "chapter description updated succefully",
       });
     } catch (error) {
       console.log(error);
@@ -124,4 +124,4 @@ const CourseDescription: FC<CourseDescriptionProps> = ({ course }) => {
   );
 };
 
-export default CourseDescription;
+export default ChapterDescription;

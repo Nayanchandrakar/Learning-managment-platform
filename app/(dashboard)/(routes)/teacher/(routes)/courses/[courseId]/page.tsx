@@ -10,6 +10,7 @@ import CourseCategory from "./_components/course-category-actoin";
 import CourseChapter from "./_components/course-chaptes-actoin";
 import CoursePrice from "./_components/course-price-action";
 import CourseAttachments from "./_components/course-attachments";
+import { Banner } from "@/components/shared/alert-banner";
 
 const CourseIdPage = async ({
   params,
@@ -63,7 +64,11 @@ const CourseIdPage = async ({
 
   return (
     <>
-      <Container className="my-12">
+      {!course?.isPublish && (
+        <Banner label="This course is unpublished. It will not be visible to the students." />
+      )}
+
+      <Container className="mb-12">
         <CourseHeaderActions
           headerText={courseHeaderText}
           check={isFieldsCompleted}

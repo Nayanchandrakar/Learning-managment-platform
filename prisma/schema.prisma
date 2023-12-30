@@ -53,10 +53,11 @@ model Attachments {
 model Chapters {
   id          String  @id @default(auto()) @map("_id") @db.ObjectId
   title       String?
-  description Json?
+  description String?
   isPublished Boolean @default(false)
   isFree      Boolean @default(false)
   position    Int
+  videoUrl    String?
 
   userProgress UserProgress[]
 
