@@ -2,7 +2,7 @@ import { getRequest } from "@/actions/getRequests";
 import prismadb from "@/lib/prismadb";
 import { NextResponse } from "next/server";
 
-export const POST = async (
+export const PATCH = async (
   req: Request,
   {
     params,

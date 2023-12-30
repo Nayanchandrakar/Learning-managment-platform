@@ -1,6 +1,6 @@
 "use client";
 import { FC, useState } from "react";
-import { Pencil } from "lucide-react";
+import { BookOpenText, Pencil } from "lucide-react";
 
 import { Input } from "@/components/ui/input";
 import {
@@ -21,6 +21,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import ActionTitle from "@/components/shared/action-titles";
 
 interface CourseDescriptionProps {
   course: Course & {
@@ -70,59 +71,65 @@ const CourseDescription: FC<CourseDescriptionProps> = ({ course }) => {
   };
 
   return (
-    <div className="p-6 bg-slate-100 border border-zinc-100 rounded-lg w-full h-fit">
-      <div className="flex flex-row items-center justify-between">
-        <span className="font-medium text-base">description</span>
-        <span
-          onClick={handleEdit}
-          className="font-medium text-sm flex cursor-pointer "
-        >
-          {isEdited ? (
-            "cancel"
-          ) : (
-            <>
-              <Pencil className="w-5 h-5 mr-2" />
-              Edit description
-            </>
-          )}
-        </span>
-      </div>
-
-      <div className="mt-3  ">
-        {isEdited ? (
-          <Form {...form}>
-            <form className="space-y-4" onSubmit={form?.handleSubmit(onsubmit)}>
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input
-                        disabled={isSubmiting}
-                        placeholder="enter course description"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <Button disabled={isSubmiting}>Submit</Button>
-            </form>
-          </Form>
-        ) : (
-          <p
-            className={cn(
-              "font-medium text-sm flex",
-              !description && "italic text-slate-400"
-            )}
+    <>
+      <ActionTitle Icon={BookOpenText} title="Description" />
+      <div className="p-6 bg-slate-100 border border-zinc-100 rounded-lg w-full h-fit">
+        <div className="flex flex-row items-center justify-between">
+          <span className="font-medium text-base">description</span>
+          <span
+            onClick={handleEdit}
+            className="font-medium text-sm flex cursor-pointer "
           >
-            {description || "no description added!"}
-          </p>
-        )}
+            {isEdited ? (
+              "cancel"
+            ) : (
+              <>
+                <Pencil className="w-5 h-5 mr-2" />
+                Edit description
+              </>
+            )}
+          </span>
+        </div>
+
+        <div className="mt-3  ">
+          {isEdited ? (
+            <Form {...form}>
+              <form
+                className="space-y-4"
+                onSubmit={form?.handleSubmit(onsubmit)}
+              >
+                <FormField
+                  control={form.control}
+                  name="description"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          disabled={isSubmiting}
+                          placeholder="enter course description"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Button disabled={isSubmiting}>Submit</Button>
+              </form>
+            </Form>
+          ) : (
+            <p
+              className={cn(
+                "font-medium text-sm flex",
+                !description && "italic text-slate-400"
+              )}
+            >
+              {description || "no description added!"}
+            </p>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -69,16 +69,16 @@ const CourseIdPage = async ({
           check={isFieldsCompleted}
         />
 
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-[40%_60%] gap-x-6">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-[55%_45%] gap-x-6">
           {/* course div 1 */}
-          <div className="space-y-4">
+          <div className="space-y-5">
             <CourseTitle course={course} />
             <CourseDescription course={course} />
             <CourseImageUpload course={course} />
             <CourseCategory course={course} categories={categories} />
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-5">
             <CourseChapter course={course} />
             <CoursePrice course={course} />
             <CourseAttachments course={course} />

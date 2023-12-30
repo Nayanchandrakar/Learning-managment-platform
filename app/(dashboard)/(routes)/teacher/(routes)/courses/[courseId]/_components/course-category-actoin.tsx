@@ -1,6 +1,6 @@
 "use client";
 import { FC, useState } from "react";
-import { Pencil } from "lucide-react";
+import { FlipHorizontal, Pencil } from "lucide-react";
 
 import { Combobox } from "@/components/ui/combobox";
 import {
@@ -21,6 +21,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import ActionTitle from "@/components/shared/action-titles";
 
 interface CourseCategoryProps {
   course: Course & {
@@ -79,55 +80,61 @@ const CourseCategory: FC<CourseCategoryProps> = ({ course, categories }) => {
   };
 
   return (
-    <div className="p-6 bg-slate-100 border border-zinc-100 rounded-lg w-full h-fit">
-      <div className="flex flex-row items-center justify-between">
-        <span className="font-medium text-base">Course category</span>
-        <span
-          onClick={handleEdit}
-          className="font-medium text-sm flex cursor-pointer "
-        >
-          {isEdited ? (
-            "cancel"
-          ) : (
-            <>
-              <Pencil className="w-5 h-5 mr-2" />
-              Edit category
-            </>
-          )}
-        </span>
-      </div>
-
-      <div className="mt-3  ">
-        {isEdited ? (
-          <Form {...form}>
-            <form className="space-y-4" onSubmit={form?.handleSubmit(onsubmit)}>
-              <FormField
-                control={form.control}
-                name="categoryId"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Combobox options={options} {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <Button disabled={isSubmiting}>Submit</Button>
-            </form>
-          </Form>
-        ) : (
-          <p
-            className={cn(
-              "font-medium text-sm flex",
-              !selectedCategoryName && "italic text-slate-400"
-            )}
+    <>
+      <ActionTitle Icon={FlipHorizontal} title="Category" />
+      <div className="p-6 bg-slate-100 border border-zinc-100 rounded-lg w-full h-fit">
+        <div className="flex flex-row items-center justify-between">
+          <span className="font-medium text-base">Course category</span>
+          <span
+            onClick={handleEdit}
+            className="font-medium text-sm flex cursor-pointer "
           >
-            {selectedCategoryName || "no category selected!"}
-          </p>
-        )}
+            {isEdited ? (
+              "cancel"
+            ) : (
+              <>
+                <Pencil className="w-5 h-5 mr-2" />
+                Edit category
+              </>
+            )}
+          </span>
+        </div>
+
+        <div className="mt-3  ">
+          {isEdited ? (
+            <Form {...form}>
+              <form
+                className="space-y-4"
+                onSubmit={form?.handleSubmit(onsubmit)}
+              >
+                <FormField
+                  control={form.control}
+                  name="categoryId"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Combobox options={options} {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Button disabled={isSubmiting}>Submit</Button>
+              </form>
+            </Form>
+          ) : (
+            <p
+              className={cn(
+                "font-medium text-sm flex",
+                !selectedCategoryName && "italic text-slate-400"
+              )}
+            >
+              {selectedCategoryName || "no category selected!"}
+            </p>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -1,6 +1,6 @@
 "use client";
 import { FC, useState } from "react";
-import { Loader2, PlusCircle } from "lucide-react";
+import { ArrowDownUp, Loader2, PlusCircle } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -22,6 +22,7 @@ import { useRouter } from "next/navigation";
 import ChapterDroppable from "./chapter-droppable";
 import { cn } from "@/lib/utils";
 import { valuesListInterface } from "@/types/types";
+import ActionTitle from "@/components/shared/action-titles";
 
 interface CourseChapterProps {
   course: Course & {
@@ -136,74 +137,77 @@ const CourseChapter: FC<CourseChapterProps> = ({ course }) => {
   };
 
   return (
-    <div className="p-6 bg-slate-100 border border-zinc-100 rounded-lg w-full h-fit relative">
-      <>
-        <div className="flex flex-row items-center justify-between">
-          <span className="font-medium text-base">Course chapters</span>
-          <span
-            onClick={handleEdit}
-            className="font-medium text-sm flex cursor-pointer "
-          >
+    <>
+      <ActionTitle Icon={ArrowDownUp} title="Chapters" />
+      <div className="p-6 bg-slate-100 border border-zinc-100 rounded-lg w-full h-fit relative">
+        <>
+          <div className="flex flex-row items-center justify-between">
+            <span className="font-medium text-base">Course chapters</span>
+            <span
+              onClick={handleEdit}
+              className="font-medium text-sm flex cursor-pointer "
+            >
+              {isEdited ? (
+                "cancel"
+              ) : (
+                <>
+                  <PlusCircle className="w-5 h-5 mr-2" />
+                  Add an chapter
+                </>
+              )}
+            </span>
+          </div>
+
+          <div className="mt-3 ">
             {isEdited ? (
-              "cancel"
+              <Form {...form}>
+                <form
+                  className="space-y-4"
+                  onSubmit={form?.handleSubmit(onsubmit)}
+                >
+                  <FormField
+                    control={form.control}
+                    name="title"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <Input
+                            disabled={isSubmiting}
+                            placeholder="enter chapter title"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <Button disabled={isSubmiting}>Create</Button>
+                </form>
+              </Form>
+            ) : course?.chapters?.length === 0 ? (
+              <p className="font-medium text-sm flex italic text-slate-400">
+                {"No chapters"}
+              </p>
             ) : (
-              <>
-                <PlusCircle className="w-5 h-5 mr-2" />
-                Add an chapter
-              </>
+              <ChapterDroppable
+                onDragEnd={onDragEnd}
+                chapters={chapters}
+                handleToogle={handleToogle}
+              />
             )}
-          </span>
-        </div>
+          </div>
 
-        <div className="mt-3 ">
-          {isEdited ? (
-            <Form {...form}>
-              <form
-                className="space-y-4"
-                onSubmit={form?.handleSubmit(onsubmit)}
-              >
-                <FormField
-                  control={form.control}
-                  name="title"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Input
-                          disabled={isSubmiting}
-                          placeholder="enter chapter title"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <Button disabled={isSubmiting}>Create</Button>
-              </form>
-            </Form>
-          ) : course?.chapters?.length === 0 ? (
-            <p className="font-medium text-sm flex italic text-slate-400">
-              {"No chapters"}
-            </p>
-          ) : (
-            <ChapterDroppable
-              onDragEnd={onDragEnd}
-              chapters={chapters}
-              handleToogle={handleToogle}
-            />
-          )}
-        </div>
-
-        <div
-          className={cn(
-            "absolute inset-0 flex items-center justify-center bg-zinc-100/80 rounded-lg",
-            !isDragging && "hidden"
-          )}
-        >
-          <Loader2 className="text-cyan-700 w-8 h-8 animate-spin" />
-        </div>
-      </>
-    </div>
+          <div
+            className={cn(
+              "absolute inset-0 flex items-center justify-center bg-zinc-100/80 rounded-lg",
+              !isDragging && "hidden"
+            )}
+          >
+            <Loader2 className="text-cyan-700 w-8 h-8 animate-spin" />
+          </div>
+        </>
+      </div>
+    </>
   );
 };
 
