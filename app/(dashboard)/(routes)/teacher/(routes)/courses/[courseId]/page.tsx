@@ -1,8 +1,6 @@
-import BackButton from "@/components/shared/back-button";
 import Container from "@/components/shared/container";
 import prismadb from "@/lib/prismadb";
 import { redirect } from "next/navigation";
-import CourseHeaderActions from "./_components/course-header-actions";
 import CourseTitle from "./_components/course-title-field";
 import CourseDescription from "./_components/course-description-action";
 import CourseImageUpload from "./_components/course-image-upload";
@@ -11,6 +9,7 @@ import CourseChapter from "./_components/course-chaptes-actoin";
 import CoursePrice from "./_components/course-price-action";
 import CourseAttachments from "./_components/course-attachments";
 import { Banner } from "@/components/shared/alert-banner";
+import CourseHeaderAction from "./_components/course-header-actions";
 
 const CourseIdPage = async ({
   params,
@@ -69,9 +68,10 @@ const CourseIdPage = async ({
       )}
 
       <Container className="mb-12">
-        <CourseHeaderActions
+        <CourseHeaderAction
           headerText={courseHeaderText}
           check={isFieldsCompleted}
+          course={course}
         />
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-[55%_45%] gap-x-6">

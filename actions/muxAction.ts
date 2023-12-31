@@ -1,10 +1,21 @@
 import Mux from "@mux/mux-node";
 import prismadb from "@/lib/prismadb";
+import { getRequest } from "./getRequests";
 
 const { Video } = new Mux(
   process.env.MUX_ACCESS_TOKEN_ID!,
   process.env.MUX_SECRET_ID!
 );
+
+export const deleteMuxVideoAsset = async (assetId: string) => {
+  try {
+    const deletedMuxVideo = await Video?.Assets?.del(assetId);
+
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
 
 export const deleteMux = async (muxId: string, assetId: string) => {
   try {
@@ -14,7 +25,7 @@ export const deleteMux = async (muxId: string, assetId: string) => {
       },
     });
 
-    const deletedMuxVideo = await Video?.Assets?.del(assetId);
+    const deletedMuxVideo = await deleteMuxVideoAsset(assetId);
     return true;
   } catch (error) {
     console.log(error);
@@ -70,6 +81,64 @@ export const crudMuxData = async (
         chapterId: updateChaptersVideoUrl?.id,
       },
     });
+
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
+
+export const uploadMuxData = async (
+  courseId: string,
+  chapterId: string,
+  videoUrl: string
+) => {
+  try {
+    if (!courseId || !chapterId || !videoUrl) return false;
+
+    const requestData = await getRequest();
+
+    if (!requestData?.isApproved || !requestData?.userId) {
+      return false;
+    }
+
+    const isExist = await prismadb?.muxData.findFirst({
+      where: {
+        chapterId,
+      },
+    });
+
+    if (isExist?.playbackId) {
+      const deletedMuxData = await deleteMux(isExist?.id, isExist?.assetId);
+
+      const asset = await createMuxAsset(videoUrl);
+
+      if (!asset?.assetId) {
+        return new Response("check your mux data", { status: 402 });
+      }
+
+      const createMuxData = await crudMuxData(
+        chapterId,
+        courseId,
+        videoUrl,
+        asset
+      );
+
+      return true;
+    }
+
+    const asset = await createMuxAsset(videoUrl);
+
+    if (!asset?.assetId) {
+      return new Response("check your mux data", { status: 402 });
+    }
+
+    const createMuxData = await crudMuxData(
+      chapterId,
+      courseId,
+      videoUrl,
+      asset
+    );
 
     return true;
   } catch (error) {

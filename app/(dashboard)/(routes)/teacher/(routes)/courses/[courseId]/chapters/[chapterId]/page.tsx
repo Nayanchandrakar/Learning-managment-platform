@@ -8,7 +8,6 @@ import ChapterDescription from "./_components/chapter-description";
 import ChapterPreview from "./_components/chapter-preview";
 import ChapterHeaderActions from "./_components/chapter-header-actions";
 import ChapterVideoUpload from "./_components/chapter-video-action";
-import { revalidateTag } from "next/cache";
 
 const CourseIdPage = async ({
   params,
@@ -34,8 +33,6 @@ const CourseIdPage = async ({
     redirect("/");
   }
 
-  revalidateTag("chapterPage_revalidate");
-
   const fields = [
     chapter?.title,
     chapter?.description,
@@ -55,12 +52,15 @@ const CourseIdPage = async ({
         <Banner label="This chapter is unpublished. It will not be visible to the students." />
       )}
 
-      <BackButton />
+      <div className="my-3 sm:my-4">
+        <BackButton />
+      </div>
 
       <Container className="mb-12">
         <ChapterHeaderActions
           headerText={courseHeaderText}
           check={isFieldsCompleted}
+          chapter={chapter}
         />
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-[55%_45%] gap-x-6">

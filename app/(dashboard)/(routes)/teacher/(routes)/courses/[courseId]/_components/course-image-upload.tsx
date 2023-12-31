@@ -87,7 +87,8 @@ const CourseImageUpload: FC<CourseImageUploadProps> = ({ course }) => {
               className={cn(
                 "w-full ",
                 !course?.imageUrl &&
-                  "bg-zinc-200 text-zinc-800 flex items-center justify-center cursor-pointer"
+                  "bg-zinc-200 text-zinc-800 flex items-center justify-center cursor-pointer",
+                !course?.imageUrl && "h-52"
               )}
             >
               {course?.imageUrl ? (

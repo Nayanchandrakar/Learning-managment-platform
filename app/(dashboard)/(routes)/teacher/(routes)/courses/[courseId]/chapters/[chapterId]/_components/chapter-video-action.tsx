@@ -3,7 +3,6 @@
 import { FC, useState } from "react";
 import { Chapters, MuxData } from "@prisma/client";
 import { z } from "zod";
-import axios from "axios";
 import { PlusCircle, Video } from "lucide-react";
 import MuxPlayer from "@mux/mux-player-react";
 
@@ -12,7 +11,8 @@ import { toast } from "@/components/ui/use-toast";
 import ActionTitle from "@/components/shared/action-titles";
 import { FileUpload } from "@/components/shared/file-upload";
 import { videoFormSchema } from "@/schema/zodSchema";
-import { revalidateServer } from "@/actions/actions";
+import { uploadVideoMux } from "@/actions/actions";
+import { useRouter } from "next/navigation";
 
 interface ChapterVideoUploadProps {
   chapter: Chapters & {
@@ -22,6 +22,8 @@ interface ChapterVideoUploadProps {
 
 const ChapterVideoUpload: FC<ChapterVideoUploadProps> = ({ chapter }) => {
   const [isEdited, setIsEdited] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const router = useRouter();
 
   const handleEdit = () => {
     setIsEdited((prev) => !prev);
@@ -31,13 +33,28 @@ const ChapterVideoUpload: FC<ChapterVideoUploadProps> = ({ chapter }) => {
 
   const onSubmit = async (values: z.infer<typeof videoFormSchema>) => {
     try {
-      const response = await axios.patch(
-        `/api/courses/${chapter?.courseId}/chapter/${chapter?.id}/video`,
-        values
+      setIsSubmitting(true);
+
+      if (!chapter?.courseId) {
+        throw Error("no course found");
+      }
+
+      if (!chapter?.id) {
+        throw Error("no chapter found");
+      }
+
+      if (!values?.videoUrl) {
+        throw Error("not found");
+      }
+
+      const isUploaded = await uploadVideoMux(
+        chapter?.courseId,
+        chapter?.id,
+        values?.videoUrl
       );
 
       setIsEdited((prev) => !prev);
-      await revalidateServer("chapterPage_revalidate");
+      router?.refresh();
 
       return toast({
         title: "chapter video succefully uploaded!",
@@ -48,6 +65,8 @@ const ChapterVideoUpload: FC<ChapterVideoUploadProps> = ({ chapter }) => {
         variant: "destructive",
         description: "an error occured during video url upload in server!",
       });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -57,9 +76,10 @@ const ChapterVideoUpload: FC<ChapterVideoUploadProps> = ({ chapter }) => {
       <div className="p-6 bg-slate-100 border border-zinc-100 rounded-lg w-full h-fit">
         <div className="flex flex-row items-center justify-between">
           <span className="font-medium text-base">Chapter video</span>
-          <span
+          <button
             onClick={handleEdit}
-            className="font-medium text-sm flex cursor-pointer "
+            disabled={isSubmitting}
+            className="font-medium text-sm flex cursor-pointer disabled:opacity-50 "
           >
             {isEdited ? (
               "cancel"
@@ -69,7 +89,7 @@ const ChapterVideoUpload: FC<ChapterVideoUploadProps> = ({ chapter }) => {
                 Add a video
               </>
             )}
-          </span>
+          </button>
         </div>
 
         <div className="mt-3  ">
