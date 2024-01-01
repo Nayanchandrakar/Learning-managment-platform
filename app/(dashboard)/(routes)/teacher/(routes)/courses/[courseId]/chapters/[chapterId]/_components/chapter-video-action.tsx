@@ -53,8 +53,7 @@ const ChapterVideoUpload: FC<ChapterVideoUploadProps> = ({ chapter }) => {
         values?.videoUrl
       );
 
-      setIsEdited((prev) => !prev);
-      router?.refresh();
+      handleEdit();
 
       return toast({
         title: "chapter video succefully uploaded!",
@@ -67,6 +66,7 @@ const ChapterVideoUpload: FC<ChapterVideoUploadProps> = ({ chapter }) => {
       });
     } finally {
       setIsSubmitting(false);
+      router?.refresh();
     }
   };
 

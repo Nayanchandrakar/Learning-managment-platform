@@ -10,6 +10,7 @@ import CoursePrice from "./_components/course-price-action";
 import CourseAttachments from "./_components/course-attachments";
 import { Banner } from "@/components/shared/alert-banner";
 import CourseHeaderAction from "./_components/course-header-actions";
+import { revalidatePath } from "next/cache";
 
 const CourseIdPage = async ({
   params,
@@ -38,6 +39,8 @@ const CourseIdPage = async ({
       category: true,
     },
   });
+
+  revalidatePath("fetch_course");
 
   const categories = await prismadb?.category?.findMany();
 

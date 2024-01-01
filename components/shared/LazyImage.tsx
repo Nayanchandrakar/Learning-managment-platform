@@ -10,13 +10,18 @@ interface LazyImageProps {
   width: number;
   height: number;
   sizes?: string;
+  className?: string;
 }
 
-const LazyImage: FC<LazyImageProps> = (
-  { src, alt, width, height, sizes, ...props },
-  ref
-) => {
-  const [isLoading, setIsLoading] = useState(false);
+const LazyImage: FC<LazyImageProps> = ({
+  src,
+  alt,
+  width,
+  height,
+  sizes,
+  className,
+}) => {
+  const [isLoading, setIsLoading] = useState(true);
 
   return (
     <div className="relative inset-0 w-full h-full">
@@ -26,13 +31,14 @@ const LazyImage: FC<LazyImageProps> = (
         width={width}
         height={height}
         sizes={sizes || ""}
-        {...props}
-        ref={ref}
+        className={className}
+        onLoad={() => setIsLoading(false)}
+        loading="lazy"
       />
       <div
         className={cn(
-          "w-full transition-all duration-300 h-full absolute inset-0 ",
-          isLoading && "bg-white/10  backdrop-blur-lgs"
+          "w-full transition-all duration-300 h-full absolute inset-0 bg-black/10 rounded-lg",
+          isLoading && "b  backdrop-blur-lg"
         )}
       />
     </div>

@@ -75,15 +75,15 @@ const CourseHeaderAction: FC<CourseHeaderActionProps> = ({
         title: "course deleted succefully",
       });
     } catch (error: any) {
-      if (error?.response?.status === 406) {
+      if (error?.response?.status === 405) {
         return toast({
           variant: "destructive",
-          description: "please fill the fields",
+          description: error?.response?.data,
         });
       } else {
         return toast({
           variant: "destructive",
-          description: "try after some time",
+          description: error?.response?.data,
         });
       }
     } finally {
@@ -94,7 +94,7 @@ const CourseHeaderAction: FC<CourseHeaderActionProps> = ({
   return (
     <div className="flex justify-between items-center flex-row  py-5">
       <div className="flex flex-col items-start justify-center space-y-2">
-        <h2 className="text-lg md:text-xl font-semibold ">Chapter creation</h2>
+        <h2 className="text-lg md:text-xl font-semibold ">Course creation</h2>
         <p className="text-zinc-500 text-sm md:text-base">{headerText}</p>
       </div>
       <div className="flex flex-row items-center space-x-3">

@@ -102,11 +102,15 @@ export const uploadMuxData = async (
       return false;
     }
 
+    console.info(requestData);
+
     const isExist = await prismadb?.muxData.findFirst({
       where: {
         chapterId,
       },
     });
+
+    console.info(isExist, "isExist");
 
     if (isExist?.playbackId) {
       const deletedMuxData = await deleteMux(isExist?.id, isExist?.assetId);
@@ -129,8 +133,10 @@ export const uploadMuxData = async (
 
     const asset = await createMuxAsset(videoUrl);
 
+    console.info(asset, "asset");
+
     if (!asset?.assetId) {
-      return new Response("check your mux data", { status: 402 });
+      return false;
     }
 
     const createMuxData = await crudMuxData(
@@ -139,6 +145,8 @@ export const uploadMuxData = async (
       videoUrl,
       asset
     );
+
+    console.info(createMuxData, "createMuxData");
 
     return true;
   } catch (error) {

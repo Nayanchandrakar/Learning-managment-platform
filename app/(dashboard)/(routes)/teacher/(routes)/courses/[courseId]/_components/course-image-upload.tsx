@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 import { toast } from "@/components/ui/use-toast";
 import ActionTitle from "@/components/shared/action-titles";
 import { FileUpload } from "@/components/shared/file-upload";
+import LazyImage from "@/components/shared/LazyImage";
 
 interface CourseImageUploadProps {
   course: Course & {
@@ -92,7 +93,7 @@ const CourseImageUpload: FC<CourseImageUploadProps> = ({ course }) => {
               )}
             >
               {course?.imageUrl ? (
-                <Image
+                <LazyImage
                   src={course?.imageUrl!}
                   width={100}
                   height={100}
