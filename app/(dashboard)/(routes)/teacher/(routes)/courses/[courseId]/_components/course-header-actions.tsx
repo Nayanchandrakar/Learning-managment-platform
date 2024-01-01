@@ -7,6 +7,19 @@ import { Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { FC, useState } from "react";
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import AlertModal from "@/components/shared/models/confirm-modal";
+
 interface CourseHeaderActionProps {
   headerText: string;
   check: boolean;
@@ -21,7 +34,10 @@ const CourseHeaderAction: FC<CourseHeaderActionProps> = ({
   course,
 }) => {
   const [isSubmiting, setIsSubmiting] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+
   const router = useRouter();
+  const handleToogle = () => setIsOpen((prev) => !prev);
 
   const isPublished = course?.isPublish;
   const courseId = course?.id;
@@ -88,6 +104,7 @@ const CourseHeaderAction: FC<CourseHeaderActionProps> = ({
       }
     } finally {
       setIsSubmiting(false);
+      handleToogle();
     }
   };
 
@@ -106,13 +123,42 @@ const CourseHeaderAction: FC<CourseHeaderActionProps> = ({
         >
           {isPublished ? "Unpublish" : "Publish"}
         </Button>
+
         <Button
           disabled={isSubmiting}
           className="disabled:opacity-60"
-          onClick={deleteCourse}
+          onClick={handleToogle}
         >
           <Trash className="w-5 h-5" />
         </Button>
+
+        <AlertModal onOpenChange={handleToogle} isOpen={isOpen}>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete your
+              account and remove your data from our servers.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <Button
+              variant="outline"
+              disabled={isSubmiting}
+              className="disabled:opacity-60"
+              onClick={handleToogle}
+            >
+              Cancel
+            </Button>
+
+            <Button
+              disabled={isSubmiting}
+              className="disabled:opacity-60 bg-red-600 hover:bg-red-600/90"
+              onClick={() => deleteCourse()}
+            >
+              Continue
+            </Button>
+          </AlertDialogFooter>
+        </AlertModal>
       </div>
     </div>
   );

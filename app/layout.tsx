@@ -33,6 +33,7 @@ export default async function RootLayout({
           <MobileSidebar />
           <Toaster />
           <TeacherModal request={teacherRequest} />
+          
           <CourseCreateModal />
           {children}
         </body>
