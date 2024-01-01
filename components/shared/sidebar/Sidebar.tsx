@@ -6,9 +6,9 @@ import {
   Compass,
   Layout,
   LucideIcon,
+  PlusCircle,
 } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
-import { FC } from "react";
 
 interface navigationInterface {
   Icon: LucideIcon;
@@ -28,6 +28,11 @@ const Sidebar = () => {
   const teacherPanel: navigationInterface[] = [
     { label: "Analytics", href: "/teacher/analytics", Icon: BarChart2 },
     { label: "Sales", href: "/teacher/courses", Icon: CircleDollarSign },
+    {
+      label: "Create course",
+      href: "/teacher/create",
+      Icon: PlusCircle,
+    },
   ];
 
   const handleClick = (href: string) => {
