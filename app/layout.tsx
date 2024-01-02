@@ -8,7 +8,7 @@ import TeacherModal from "@/components/shared/models/teacher-modal";
 import "@/style/globals.css";
 import { getRequest } from "@/actions/getRequests";
 import { Toaster } from "@/components/ui/toaster";
-import CourseCreateModal from "@/app/(dashboard)/(routes)/teacher/(routes)/create/_components/course-create-modal";
+import CourseCreateModal from "@/app/(teacher)/(routes)/teacher/(routes)/create/_components/course-create-modal";
 import "@uploadthing/react/styles.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -33,7 +33,7 @@ export default async function RootLayout({
           <MobileSidebar />
           <Toaster />
           <TeacherModal request={teacherRequest} />
-          
+
           <CourseCreateModal />
           {children}
         </body>
