@@ -1,22 +1,19 @@
 "use client";
 
 import { FC } from "react";
-import { Course } from "@prisma/client";
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
 
 interface OverviewProps {
-  data: Course[];
+  data: {
+    total: number;
+    title: string;
+  }[];
 }
 
 const Overview: FC<OverviewProps> = ({ data }) => {
-  const courseSells = data?.map((course) => ({
-    name: course?.name,
-    total: course?.price,
-  }));
-
   return (
     <ResponsiveContainer width="100%" height={350}>
-      <BarChart data={courseSells}>
+      <BarChart data={data}>
         <XAxis
           dataKey="name"
           stroke="#888888"
