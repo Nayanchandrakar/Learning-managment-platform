@@ -2,7 +2,6 @@ import { getChapters } from "@/actions/get-chapters";
 import { Banner } from "@/components/shared/alert-banner";
 import TextEditor from "@/components/shared/text-editor";
 import { Separator } from "@/components/ui/separator";
-import prismadb from "@/lib/prismadb";
 import { auth } from "@clerk/nextjs";
 import { File } from "lucide-react";
 import { redirect } from "next/navigation";
@@ -81,7 +80,7 @@ const ChapterIdPage = async ({
           </div>
           <Separator />
           <div>
-            <TextEditor readOnly value={chapter.description!} />
+            <TextEditor theme="bubble" readOnly value={chapter.description!} />
           </div>
           {!!Attachments.length && (
             <>

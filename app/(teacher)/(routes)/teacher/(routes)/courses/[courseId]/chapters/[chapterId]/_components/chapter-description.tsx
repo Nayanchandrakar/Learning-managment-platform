@@ -116,7 +116,7 @@ const ChapterDescription: FC<ChapterDescriptionProps> = ({ chapter }) => {
               {description || "no description added!"}
             </p>
           ) : (
-            <TextEditor readOnly value={description} />
+            <TextEditor theme="bubble" readOnly value={description} />
           )}
         </div>
       </div>

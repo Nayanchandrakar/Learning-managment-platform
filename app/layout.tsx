@@ -10,6 +10,7 @@ import { getRequest } from "@/actions/getRequests";
 import { Toaster } from "@/components/ui/toaster";
 import CourseCreateModal from "@/app/(teacher)/(routes)/teacher/(routes)/create/_components/course-create-modal";
 import "@uploadthing/react/styles.css";
+import { ConfettiProvider } from "@/components/shared/confetti-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -29,6 +30,7 @@ export default async function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body className={inter.className}>
+          <ConfettiProvider />
           <Navbar />
           <MobileSidebar />
           <Toaster />

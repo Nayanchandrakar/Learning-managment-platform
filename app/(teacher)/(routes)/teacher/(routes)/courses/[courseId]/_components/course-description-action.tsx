@@ -15,11 +15,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Chapters, Course } from "@prisma/client";
 import { toast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import ActionTitle from "@/components/shared/action-titles";
 import TextEditor from "@/components/shared/text-editor";
+import { Input } from "@/components/ui/input";
 
 interface CourseDescriptionProps {
   course: Course & {
@@ -102,7 +102,7 @@ const CourseDescription: FC<CourseDescriptionProps> = ({ course }) => {
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>
-                        <TextEditor {...field} />
+                        <Input {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -111,12 +111,10 @@ const CourseDescription: FC<CourseDescriptionProps> = ({ course }) => {
                 <Button disabled={isSubmiting}>Submit</Button>
               </form>
             </Form>
-          ) : !description ? (
+          ) : (
             <p className="font-medium text-sm flex italic text-slate-400">
               {description || "no description added!"}
             </p>
-          ) : (
-            <TextEditor readOnly value={description} />
           )}
         </div>
       </div>

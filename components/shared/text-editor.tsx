@@ -7,12 +7,12 @@ import "react-quill/dist/quill.snow.css";
 interface TextEditorProps {
   onChange?: () => void;
   value: string;
-  theme?: "snow";
+  theme?: "snow" | "bubble";
   readOnly?: boolean;
 }
 
 const TextEditor: FC<TextEditorProps> = ({
-  theme = "snow",
+  theme,
   value,
   onChange,
   readOnly,
@@ -35,7 +35,7 @@ const TextEditor: FC<TextEditorProps> = ({
       className="bg-white"
       onChange={onChange}
       value={value}
-      theme={theme}
+      theme={theme || "snow"}
       readOnly={readOnly}
     />
   );

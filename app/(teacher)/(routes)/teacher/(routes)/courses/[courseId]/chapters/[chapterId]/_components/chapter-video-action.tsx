@@ -54,10 +54,6 @@ const ChapterVideoUpload: FC<ChapterVideoUploadProps> = ({ chapter }) => {
       );
 
       handleEdit();
-
-      return toast({
-        title: "chapter video succefully uploaded!",
-      });
     } catch (error) {
       console.log(error);
       return toast({
