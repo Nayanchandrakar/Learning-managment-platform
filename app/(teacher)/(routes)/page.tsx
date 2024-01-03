@@ -1,5 +1,15 @@
-const page = () => {
-  return <div className="h-[100rem] bg-red-200 w-full">Home page</div>;
+import { getDashboardCourses } from "@/actions/get-dashboard-courses";
+import Container from "@/components/shared/container";
+import { CoursesList } from "@/components/shared/course-list";
+
+const page = async () => {
+  const courses = await getDashboardCourses();
+
+  return (
+    <Container className="my-12">
+      <CoursesList items={courses} />
+    </Container>
+  );
 };
 
 export default page;
