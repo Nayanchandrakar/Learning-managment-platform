@@ -1,10 +1,20 @@
 import prismadb from "@/lib/prismadb";
 
-export const getDashboardCourses = async () => {
+interface searchParams {
+  categoryId: string;
+  title: string;
+}
+
+export const getDashboardCourses = async ({
+  categoryId,
+  title,
+}: searchParams) => {
   try {
     const allCourses = await prismadb?.course?.findMany({
       where: {
         isPublish: true,
+        name: title,
+        categoryId: categoryId,
       },
       include: {
         category: true,

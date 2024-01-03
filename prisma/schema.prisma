@@ -1,13 +1,14 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-generator client {
-  provider = "prisma-client-js"
-}
-
 datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextIndex", "fullTextSearch"]
 }
 
 model requests {
@@ -32,6 +33,9 @@ model Course {
   attachments Attachments[]
   chapters    Chapters[]    @relation("course_chapters")
   purchases   Purchase[]
+
+  @@index([categoryId])
+  @@fulltext([name])
 }
 
 model Category {
