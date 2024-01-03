@@ -7,10 +7,11 @@ import { FC, useState } from "react";
 interface LazyImageProps {
   src: string;
   alt: string;
-  width: number;
-  height: number;
+  width?: number;
+  height?: number;
   sizes?: string;
   className?: string;
+  fill?: boolean;
 }
 
 const LazyImage: FC<LazyImageProps> = ({
@@ -20,6 +21,7 @@ const LazyImage: FC<LazyImageProps> = ({
   height,
   sizes,
   className,
+  fill = false,
 }) => {
   const [isLoading, setIsLoading] = useState(true);
 
@@ -34,11 +36,12 @@ const LazyImage: FC<LazyImageProps> = ({
         className={className}
         onLoad={() => setIsLoading(false)}
         loading="lazy"
+        fill={fill}
       />
       <div
         className={cn(
-          "w-full transition-all duration-300 h-full absolute inset-0 bg-black/10 rounded-lg",
-          isLoading && "b  backdrop-blur-lg"
+          "w-full transition-all duration-800 h-full absolute inset-0  rounded-lg",
+          isLoading && "bg-white/20  backdrop-blur-lg"
         )}
       />
     </div>
