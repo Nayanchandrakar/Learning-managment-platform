@@ -46,6 +46,7 @@ const SearchBar: FC<SearchBarProps> = () => {
       <Input
         onChange={(e) => setValue(e?.target?.value)}
         onKeyUp={handleEnter}
+        value={value}
         placeholder="Search for a Course"
         className="pr-9 flex items-center
          focus-visible:ring-0  focus-visible:ring-offset-0 "
