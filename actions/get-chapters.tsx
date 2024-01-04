@@ -9,8 +9,10 @@ export const getChapters = async (
   try {
     const purchase = await prismadb.purchase?.findUnique({
       where: {
-        userId,
-        courseId,
+        userId_courseId: {
+          userId,
+          courseId,
+        },
       },
     });
 

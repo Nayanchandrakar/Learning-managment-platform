@@ -19,6 +19,7 @@ const sizeByVariant = {
 };
 
 const CourseProgress: FC<CourseProgressProps> = ({ value, variant, size }) => {
+  console.log(value);
   return (
     <div>
       <Progress className="h-2" value={value} variant={variant} />

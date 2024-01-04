@@ -35,7 +35,7 @@ const CourseSidebar = async ({ course, progress }: CourseSidebarProps) => {
       {/* progress bar here  */}
 
       {purchase && (
-        <div className="mt-10">
+        <div className="mt-10 px-3">
           <CourseProgress variant="success" value={progress} />
         </div>
       )}
