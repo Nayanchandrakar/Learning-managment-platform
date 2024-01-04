@@ -12,7 +12,9 @@ const Navbar: FC<NavbarProps> = ({}) => {
     <header className="w-full h-20 border-b fixed inset-0 bg-white z-[60] flex items-center justify-between px-4 space-x-8">
       <MobileMenu />
       <Logo />
-      <SearchBar />
+      <div className="md:inline-block hidden w-full max-w-[30rem]">
+        <SearchBar />
+      </div>
       <Controls />
     </header>
   );
