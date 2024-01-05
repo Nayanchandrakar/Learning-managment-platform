@@ -16,7 +16,7 @@ const page = async ({
 
   return (
     <Container className=" my-1">
-      <div className="md:hidden inline-block w-full h-fit">
+      <div className="md:hidden pt-4 inline-block w-full h-fit">
         <SearchBar />
       </div>
 

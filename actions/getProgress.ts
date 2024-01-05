@@ -7,8 +7,8 @@ export const getProgress = async (
   try {
     const publishedChapters = await prismadb.chapters?.findMany({
       where: {
-        id: courseId,
         isPublished: true,
+        courseId,
       },
       select: {
         id: true,

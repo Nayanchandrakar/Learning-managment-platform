@@ -16,13 +16,13 @@ const SearchBar: FC<SearchBarProps> = () => {
   const searchParams = useSearchParams();
   const categoryId = searchParams.get("categoryId");
 
-  const handleSearch = () => {
+  const handleSearch = (searchValue: string) => {
     const url = qs.stringifyUrl(
       {
         url: "/",
         query: {
           categoryId,
-          title: value,
+          title: searchValue,
         },
       },
       { skipEmptyString: true, skipNull: true }
@@ -33,12 +33,13 @@ const SearchBar: FC<SearchBarProps> = () => {
 
   const handleEnter = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e?.code === "Enter") {
-      handleSearch();
+      handleSearch(value);
     }
   };
 
   const handleClear = () => {
     setValue("");
+    handleSearch("");
   };
 
   return (
@@ -62,7 +63,7 @@ const SearchBar: FC<SearchBarProps> = () => {
       </span>
 
       <span
-        onClick={handleSearch}
+        onClick={() => handleSearch(value)}
         className=" absolute top-0  h-full w-12 bg-sky-700 right-0 flex items-center justify-center rounded-r-lg transition-colors duration-300 hover:opacity-80 cursor-pointer"
       >
         <Search className="w-4 h-4 text-white " />

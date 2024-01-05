@@ -18,8 +18,8 @@ import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import ActionTitle from "@/components/shared/action-titles";
-import TextEditor from "@/components/shared/text-editor";
-import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { cn } from "@/lib/utils";
 
 interface CourseDescriptionProps {
   course: Course & {
@@ -28,7 +28,7 @@ interface CourseDescriptionProps {
 }
 
 const formSchema = z.object({
-  description: z.string().min(4).max(80),
+  description: z.string().min(4),
 });
 
 const CourseDescription: FC<CourseDescriptionProps> = ({ course }) => {
@@ -102,7 +102,7 @@ const CourseDescription: FC<CourseDescriptionProps> = ({ course }) => {
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>
-                        <Input {...field} />
+                        <Textarea {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -112,7 +112,13 @@ const CourseDescription: FC<CourseDescriptionProps> = ({ course }) => {
               </form>
             </Form>
           ) : (
-            <p className="font-medium text-sm flex italic text-slate-400">
+            <p
+              className={cn(
+                "font-medium text-sm flex ",
+                !description && "italic text-slate-400 ",
+                description && "text-justify"
+              )}
+            >
               {description || "no description added!"}
             </p>
           )}

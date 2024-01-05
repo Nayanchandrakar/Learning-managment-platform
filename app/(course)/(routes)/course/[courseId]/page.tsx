@@ -32,7 +32,7 @@ const CourseIdPage = async ({
     return redirect("/");
   }
 
-  const authenticUserRedirectUrl = `/course/${course?.id}/chapter/${course?.chapters?.[0]?.id}`;
+  const authenticUserRedirectUrl = `/course/${course?.id}/chapter/${course?.chapters?.[1]?.id}`;
 
   return redirect(authenticUserRedirectUrl);
 };

@@ -25,7 +25,7 @@ interface ChapterDescriptionProps {
 }
 
 const formSchema = z.object({
-  description: z.string().min(4).max(200),
+  description: z.string().min(4),
 });
 
 const ChapterDescription: FC<ChapterDescriptionProps> = ({ chapter }) => {

@@ -64,8 +64,6 @@ const CourseChapter: FC<CourseChapterProps> = ({ course }) => {
 
       setIsEdited((prev) => !prev);
 
-      router?.refresh();
-
       return toast({
         title: "course chapter created succefully",
       });
@@ -75,6 +73,7 @@ const CourseChapter: FC<CourseChapterProps> = ({ course }) => {
         description: "An error occured try after some time",
       });
     } finally {
+      router?.refresh();
     }
   };
 
