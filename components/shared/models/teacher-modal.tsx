@@ -78,11 +78,11 @@ const TeacherModal: FC<TeacherModalProps> = ({ request }) => {
           {request?.isApproved ? (
             <>
               <p className="mb-4 text-sm">
-                Congratulations you'r request for being a teacher has been
+                Congratulations you&apos;r request for being a teacher has been
                 approved by our administrator.
               </p>
               <Button size="sm" onClick={handleClick}>
-                Teacher's Page
+                Teacher&apos;s Page
                 <MoveUpRight className="w-5 h-5 ml-2" />
               </Button>
             </>

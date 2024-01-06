@@ -18,7 +18,7 @@ export const DELETE = async (
     const { courseId } = params;
 
     if (!requestData?.isApproved || !requestData?.userId) {
-      return false;
+      return new Response("Unauthorized user!", { status: 401 });
     }
 
     const courseOwner = await prismadb?.course?.findFirst({

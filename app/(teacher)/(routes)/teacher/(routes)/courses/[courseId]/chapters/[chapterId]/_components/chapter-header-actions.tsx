@@ -11,7 +11,7 @@ interface ChapterHeaderActionsProps {
   headerText: string;
   check: boolean;
   chapter: Chapters & {
-    muxData: MuxData;
+    muxData: MuxData | null;
   };
 }
 

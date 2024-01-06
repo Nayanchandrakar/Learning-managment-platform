@@ -15,7 +15,7 @@ const CategoryFilter: FC<CategoryFilterProps> = async ({}) => {
       id="custom_scrollbar"
     >
       {newCategory?.map((category) => (
-        <CategoryLabel category={category} />
+        <CategoryLabel key={category?.id} category={category} />
       ))}
     </div>
   );

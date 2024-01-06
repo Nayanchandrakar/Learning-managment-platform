@@ -24,7 +24,7 @@ export const DELETE = async (
     const requestData = await getRequest();
 
     if (!requestData?.isApproved || !requestData?.userId) {
-      return false;
+      return new Response("Unauthorized user!", { status: 401 });
     }
 
     const courseOwner = await prismadb?.course?.findUnique({
@@ -66,7 +66,7 @@ export const DELETE = async (
       deleteChapter?.muxData?.assetId!
     );
 
-    return NextResponse.json(deleteChapter);
+    return new Response("Chapter succefully deleted!", { status: 200 });
   } catch (error) {
     console.log(error);
     return new Response("Internal server error!");

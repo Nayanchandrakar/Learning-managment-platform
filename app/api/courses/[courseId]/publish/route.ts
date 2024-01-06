@@ -21,7 +21,7 @@ export const GET = async (
 
     const requestData = await getRequest();
     if (!requestData?.isApproved || !requestData?.userId) {
-      return false;
+      return new Response("Unauthorized user!", { status: 401 });
     }
 
     const courseOwner = await prismadb?.course?.findFirst({
