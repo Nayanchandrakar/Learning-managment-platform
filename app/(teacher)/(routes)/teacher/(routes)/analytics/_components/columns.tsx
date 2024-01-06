@@ -56,11 +56,11 @@ export const columns: ColumnDef<courseType>[] = [
     accessorKey: "status",
     header: "status",
     cell: ({ row }) => {
-      const isPublish = !!parseFloat(row.getValue("status"));
+      const isPublish = row.getValue("status");
 
       return (
-        <Badge className={cn(!isPublish ? "bg-cyan-700" : "bg-gray-600")}>
-          {isPublish ? "Draft" : "Published"}
+        <Badge className={cn(isPublish ? "bg-cyan-700" : "bg-gray-600")}>
+          {isPublish ? "Publish" : "Draft"}
         </Badge>
       );
     },

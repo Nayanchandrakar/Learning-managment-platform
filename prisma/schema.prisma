@@ -23,7 +23,7 @@ model requests {
 model Course {
   id          String        @id @default(auto()) @map("_id") @db.ObjectId
   name        String
-  userId      String        @unique
+  userId      String
   description String?
   price       Int?
   imageUrl    String?

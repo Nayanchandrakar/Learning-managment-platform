@@ -12,7 +12,7 @@ export const POST = async (req: Request) => {
 
     const { name } = createCourseSchema.parse(body);
 
-    if (!requestData?.isApproved && !requestData?.userId) {
+    if (!requestData?.isApproved || !requestData?.userId) {
       return new Response("Unauthorized user access!", { status: 401 });
     }
 

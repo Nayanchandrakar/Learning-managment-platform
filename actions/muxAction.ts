@@ -102,8 +102,6 @@ export const uploadMuxData = async (
       return false;
     }
 
-    console.info(requestData);
-
     const isExist = await prismadb?.muxData.findFirst({
       where: {
         chapterId,
