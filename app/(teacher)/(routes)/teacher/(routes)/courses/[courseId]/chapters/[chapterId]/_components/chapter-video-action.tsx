@@ -54,8 +54,7 @@ const ChapterVideoUpload: FC<ChapterVideoUploadProps> = ({ chapter }) => {
       );
 
       handleEdit();
-
-      !isEdited && router?.refresh();
+      router?.refresh();
     } catch (error) {
       console.log(error);
       return toast({

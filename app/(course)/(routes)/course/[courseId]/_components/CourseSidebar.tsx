@@ -40,7 +40,7 @@ const CourseSidebar = async ({ course, progress }: CourseSidebarProps) => {
         </div>
       )}
 
-      <div className="flex flex-col space-y-3 w-full h-full">
+      <div className="flex flex-col space-y-1 w-full h-full">
         {course?.chapters?.map((chapter) => (
           <CourseRoutes
             key={chapter?.id}
