@@ -13,7 +13,9 @@ export const getDashboardCourses = async ({
     const allCourses = await prismadb?.course?.findMany({
       where: {
         isPublish: true,
-        name: title,
+        name: {
+          contains: title,
+        },
         categoryId: categoryId,
       },
       include: {
